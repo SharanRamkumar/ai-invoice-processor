@@ -7,5 +7,5 @@
 <img width="1508" height="732" alt="image" src="https://github.com/user-attachments/assets/b6d78ef8-0ed1-48f3-ab77-c7ea00576c80" />
 
 ## NOTE : 
-Postman was used for ingestion only because its for study purposed . This can be done on a different admin page created using React and FastAPI for 
+Postman was used for ingestion only because its for study purposes . This can be done on a different admin page created using React and FastAPI for 
   better and easier ingestion
