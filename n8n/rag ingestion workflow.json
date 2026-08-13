@@ -1,0 +1,126 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "invoice_docs",
+          "mode": "list",
+          "cachedResultName": "invoice_docs"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -1152,
+        848
+      ],
+      "id": "117fca3a-719a-4b2f-aff9-e6172471a906",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "your_supabase_api",
+          "name": "sharan's_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        -1040,
+        1056
+      ],
+      "id": "d04de2ed-9486-4f89-b9dc-abfed08ca071",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rag_ingest",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1664,
+        816
+      ],
+      "id": "ee173342-5200-4698-81ba-edff769d569c",
+      "name": "invoice_policy_ingestion",
+      "webhookId": "your_webhook_id"
+    },
+    {
+      "parameters": {
+        "jsCode": "const incoming = $input.first().json.body.text\n\nreturn [\n  {\n    json: {\n      text: incoming\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1392,
+        816
+      ],
+      "id": "a7e21ff4-a272-41e9-be41-3a787ed10d6d",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "content": "For now using Postman , but will implement it in on the site if needed",
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1712,
+        1008
+      ],
+      "id": "91ab8982-42af-42ab-b7be-81555dbd643e",
+      "name": "Sticky Note4"
+    }
+  ],
+  "connections": {
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "invoice_policy_ingestion": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5506d43d34521f8d3b20dd3ca322a9957acbe39593e4a0bb99deb00fa29c57f0"
+  }
+}
