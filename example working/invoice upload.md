@@ -11,4 +11,7 @@
 <img width="1901" height="414" alt="image" src="https://github.com/user-attachments/assets/4a7db2b4-dc71-4ce0-99f8-d0647032b8f7" />
 
 # DEMO VIDEO
-URL - https://streamable.com/enabdl
+
+https://github.com/user-attachments/assets/9e5bd4a6-a123-4339-9043-8683fad413ca
+
+
