@@ -1,24 +1,147 @@
-# Logs
-logs
-*.log
+# ==========================================
+# AI Invoice Processor - .gitignore
+# ==========================================
+
+# ---------- Environment Variables ----------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Keep example environment files
+!.env.example
+
+
+# ---------- Node / React ----------
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Build output
+dist/
+build/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Vite
+.vite/
+
+
+# ---------- Python / FastAPI ----------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python packaging
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# Type checking
+.mypy_cache/
+.ruff_cache/
+
+
+# ---------- IDE / Editors ----------
+.vscode/
+.idea/
+*.iml
+
+# VS Code local history
+.history/
+
+
+# ---------- OS Files ----------
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+Desktop.ini
+
+
+# ---------- Logs ----------
+*.log
+logs/
+
+
+# ---------- Temporary Files ----------
+*.tmp
+*.temp
+*.swp
+*.swo
+
+
+# ---------- Invoice / User Uploads ----------
+# Don't accidentally upload private invoice documents
+uploads/
+uploaded_files/
+invoices/
+documents/
+
+# Common invoice file types if stored locally
+# Uncomment these if your application stores uploaded
+# invoices inside the repository:
+# *.pdf
+# *.png
+# *.jpg
+# *.jpeg
+
+
+# ---------- Generated Files ----------
+*.cache
+*.bak
+
+
+# ---------- Database ----------
+# Local SQLite/database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Supabase local development files
+.supabase/
+
+
+# ---------- n8n ----------
+# Don't commit local n8n credentials/configuration
+.n8n/
+
+# Ignore exported workflow credentials if generated locally
+# Keep workflow JSON files themselves if they don't contain secrets.
+n8n/credentials/
+n8n/.env
+
+
+# ---------- Secrets / Keys ----------
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Service account / credential files
+credentials.json
+service-account.json
+secrets.json
+
+
+# ---------- Demo / Large Files ----------
+# Don't commit large video files directly.
+# Use Git LFS for your demo video instead.
+# *.mp4
+# *.mov
+# *.avi
+# *.mkv
