@@ -1,0 +1,1 @@
+Make sure that you will replace all credentials with your own , and the embedding model used was openAI . Without the embedding model the RAG wont work 
