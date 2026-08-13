@@ -1,0 +1,228 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rag_chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -704,
+        800
+      ],
+      "id": "c114f0c0-6fb6-43bd-bace-a58c22f8f3db",
+      "name": "invoice_retrieval",
+      "webhookId": "your_webhook_id"
+    },
+    {
+      "parameters": {
+        "jsCode": "const question = $input.first().json.body.question;\n\nif (!question || !question.trim()) {\n    throw new Error(\"Question is required\");\n}\n\nreturn [\n    {\n        json: {\n            question: question.trim()\n        }\n    }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -496,
+        800
+      ],
+      "id": "1ed4b00d-5d03-409b-8651-5c7b23c5dabd",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=question : {{ $json.question }}",
+        "options": {
+          "systemMessage": "\"You are the official AI assistant for this business.\n\nRules:\n1. Before answering any non-greeting question, you MUST call the knowledge_base tool.\nDo not decide whether the tool is needed.Always call it first.\nAfter reading the returned documents, answer ONLY from those documents.\\n\\n\nIf no relevant documents are returned, say:\\n\\n\\\"I don't have that information. Please contact us directly for more details.\\\"\\n\n\n2. Never answer from your own knowledge. But make alterations from the data but never change the data itself so that it looks like an answer to the question\n3. If the tool returns information not connected to the question  respond:\\n\\\"I don't have that information. Please contact us directly for more details.\" \n4.If the tool returns information that has somewhat connection to the question , respond accordingly \nFor eg: If the user asks is the policy for 20 days , the information from tool might pull 30 days , so respond politely by saying the correction\n5. Never invent prices, services, timings or policies.\\n\n6. Keep answers concise.\\n\n7. If multiple chunks are returned, combine them into one coherent answer.\\n\n8. If the user greets you, greet them normally without searching.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -160,
+        800
+      ],
+      "id": "13028fcc-8554-4d97-b8a3-fcefd508d315",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Search the entire knowledge base for ANY information related to the business.\\n\\nUse this tool whenever a user asks a question that may require factual information.\\n\\nAlways search this tool before answering.\\n\\nReturn the most relevant information from the stored documents.\",\n",
+        "tableName": {
+          "__rl": true,
+          "value": "invoice_docs",
+          "mode": "list",
+          "cachedResultName": "invoice_docs"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -96,
+        976
+      ],
+      "id": "a24f4ba0-b745-4bc5-b061-3488d693997f",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "your_supabase_api",
+          "name": "sharan's_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.question }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -208,
+        976
+      ],
+      "id": "22858fa4-4a9a-4047-a7dd-aa053b079639",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -304,
+        976
+      ],
+      "id": "8bce74b5-c708-4602-881a-e6e533ff4e7f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "your_ai_api",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const cleanedText = $input.first().json.output\n  .replace(/\\\\n/g, \" \")\n  .replace(/\\n/g, \" \")\n  .replace(/\\s+/g, \" \")\n  .trim();\n\nreturn [\n  {\n    json: {\n      output: cleanedText\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        800
+      ],
+      "id": "1d0a7d02-6d32-4a80-8bb3-4f3b72cd3133",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        400,
+        800
+      ],
+      "id": "your_webhook_id",
+      "name": "Respond to Webhook1"
+    }
+  ],
+  "connections": {
+    "invoice_retrieval": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5506d43d34521f8d3b20dd3ca322a9957acbe39593e4a0bb99deb00fa29c57f0"
+  }
+}
