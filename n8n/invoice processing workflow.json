@@ -1,0 +1,618 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "temperature": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -880,
+        320
+      ],
+      "id": "33569364-483e-42d2-85ce-a4c1ece50ad2",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Your_AI_id",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $binary.invoice.fileType }}",
+                    "rightValue": "pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "f9d2819d-65e7-45fe-a3d4-338b06d9db2c"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9df16f15-f3f6-4158-bf60-35a12a520b29",
+                    "leftValue": "={{ $binary.invoice.fileType }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -1376,
+        256
+      ],
+      "id": "cefbb3e5-86e5-4835-a44f-16fdada26610",
+      "name": "branching the file1"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "invoice",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -1184,
+        112
+      ],
+      "id": "64175942-18db-4776-9de1-2a1ea6e7a39e",
+      "name": "binary to json1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Extract invoice details from the text below.\n\nReturn ONLY a valid JSON object.\n\nFields:\n\n- invoice_number\n- invoice_date\n- due_date\n- vendor_name\n- customer_name\n- subtotal\n- tax_amount\n- total_amount\n- status\n- gmail\n\n- NOTE: Before returning the output you must check the               following :\n          1: Predict if the coming invoice is fraud or not ,              if it is then return \" fraud \"\n          2: If the invoice_number on the incoming invoice                already exists in the supabase ( tool given) ,               return by saying \" Duplicate \" ( not in json                 format on this case)\n\n\nIf a value cannot be found, return null.\n\nExceptions  : \n1: Predict if the coming invoice is fraud or not , if it is then return \" fraud \"\n2: If the document already exists ( by checking the invoice_ number) in the google sheets ( tool given) , return by saying \" Document already exists \"\n\nInvoice Text:\n\npdf : {{ $json.text }}\nimage :{{ $json.output[0].content[0].text }}\ngmail : sharanrs1205@gmail.com\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -880,
+        112
+      ],
+      "id": "b844662b-c114-4175-8723-ab7d3ecd0b12",
+      "name": "generalization of output1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw =$('generalization of output1').first().json.output \n\nconst cleaned = raw\n  .replace(/```json/g, '')\n  .replace(/```/g, '')\n  .trim();\n\nconst data = JSON.parse(cleaned);\n\nreturn [\n  {\n    json: data\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -416,
+        320
+      ],
+      "id": "35fbf18c-1fd3-44a4-a045-130d922a22fc",
+      "name": "cleaning1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1LiDTIXV8-L_X-R4Vw1K40679gzoR8SmR7pqC56BbPgk",
+          "mode": "list",
+          "cachedResultName": "invoice",
+          "cachedResultUrl": "Your_google_docs_url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "inputs",
+          "cachedResultUrl": "Your_google_docs_url"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "invoice_number",
+              "displayName": "invoice_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "invoice_date",
+              "displayName": "invoice_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "due_date",
+              "displayName": "due_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "vendor_name",
+              "displayName": "vendor_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "subtotal",
+              "displayName": "subtotal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "tax_amount",
+              "displayName": "tax_amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "total_amount",
+              "displayName": "total_amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Gmail",
+              "displayName": "Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -208,
+        272
+      ],
+      "id": "96ba1364-f0ff-4841-ad6c-36671aa75e98",
+      "name": "appending the invoice1",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "your_google_api",
+          "name": "sharan's_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.gmail }}",
+        "subject": "=Invoice {{ $('cleaning1').item.json.invoice_number }} Processed Successfully",
+        "emailType": "text",
+        "message": "=Hello,\n\nYour invoice has been processed successfully by the AI Invoice Processing System.\n\nInvoice Details:\n\n• Invoice Number: {{ $json.invoice_number }}\n• Invoice Date: {{ $('cleaning1').item.json.invoice_date }}\n• Due Date: {{ $('cleaning1').item.json.due_date }}\n• Vendor: {{ $('cleaning1').item.json.vendor_name }}\n• Customer: {{ $('cleaning1').item.json.customer_name }}\n• Subtotal: {{ $('cleaning1').item.json.subtotal }}\n• Tax Amount: {{ $('cleaning1').item.json.tax_amount }}\n• Total Amount: {{ $('cleaning1').item.json.total_amount }}\n• Status:{{ $json.status }}\n\nThe invoice data has been extracted, validated, and stored successfully in the records database.\n\nThis is an automated notification generated by the AI Invoice Processing Workflow.\n\nRegards,\nAI Invoice Processing System\nPowered by n8n & OpenAI\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        64,
+        368
+      ],
+      "id": "338c393d-5f63-40b6-ad21-eb49f4d9d2a9",
+      "name": "confirmation email1",
+      "webhookId": "your_webhook_id",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "your_google_api",
+          "name": "sharan's_gmail"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1"
+        },
+        "responses": {
+          "values": [
+            {
+              "type": "image",
+              "imageType": "base64",
+              "binaryPropertyName": "invoice"
+            },
+            {
+              "content": "You are an invoice extraction assistant.\n\nAnalyze this invoice image.\n\nExtract all visible text exactly as it appears.\n\nDo not summarize.\n\nPreserve line breaks whenever possible.\n\nReturn only the extracted invoice text.\n\nAnd also estimate the payment status from the invoice\n\nif the status is paid , reply by saying \" SUCESSFUL\"  otherwise say \" PAYEMENT PENDING\""
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        -1216,
+        400
+      ],
+      "id": "76045c0a-63f5-496d-a176-247f9a4b64fe",
+      "name": "Message a model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "your_ai_api",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        64,
+        208
+      ],
+      "id": "f9419851-2761-4086-a851-67351272b58e",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "invoice-upload",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1584,
+        272
+      ],
+      "id": "fe95f10d-9784-4c2e-a5e6-69c4d11b71f4",
+      "name": "invoice_ingestion",
+      "webhookId": "141de9ce-d803-4789-80ec-48d788ab485c"
+    },
+    {
+      "parameters": {
+        "tableId": "invoices",
+        "dataToSend": "autoMapInputData",
+        "inputsToIgnore": "gmail"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        448
+      ],
+      "id": "3b555d37-6cc0-4ee8-8951-d05bd9bce30a",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "your_supabase_id",
+          "name": "sharan's_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseKey": "This is a duplicate data"
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -336,
+        80
+      ],
+      "id": "29711e6e-58d2-4db0-af00-981ee8b0bb1c",
+      "name": "duplicate file"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b8a6fb99-3a64-49f8-9c66-ad6c4103318f",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -592,
+        96
+      ],
+      "id": "0684278a-086c-44fb-a5b6-96a908b658c6",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "invoices",
+        "orderBy": "invoice_number"
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        320
+      ],
+      "id": "4312bb92-0586-4623-b967-52782f48141e",
+      "name": "Get many rows in Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "your_supbase_api",
+          "name": "sharan's_supabase"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "generalization of output1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "branching the file1": {
+      "main": [
+        [
+          {
+            "node": "binary to json1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "binary to json1": {
+      "main": [
+        [
+          {
+            "node": "generalization of output1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generalization of output1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cleaning1": {
+      "main": [
+        [
+          {
+            "node": "appending the invoice1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "appending the invoice1": {
+      "main": [
+        [
+          {
+            "node": "confirmation email1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "confirmation email1": {
+      "main": [
+        []
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "generalization of output1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "invoice_ingestion": {
+      "main": [
+        [
+          {
+            "node": "branching the file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "duplicate file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "cleaning1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows in Supabase": {
+      "ai_tool": [
+        [
+          {
+            "node": "generalization of output1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5506d43d34521f8d3b20dd3ca322a9957acbe39593e4a0bb99deb00fa29c57f0"
+  }
+}
