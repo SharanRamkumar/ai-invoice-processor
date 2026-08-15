@@ -16,7 +16,7 @@ Invoice Policy Webhook
 
 ### Explanation
 
-The workflow receives invoice and finance-related policy information through the **Invoice Policy Webhook**.
+The workflow receives invoice and finance-related policy information through the **Invoice Policy Webhook** ( Data sent from postman ).
 
 The JavaScript node formats the incoming data before sending it to the **Supabase Vector Store**. The document is converted into embeddings using **OpenAI Embeddings** and stored in the vector database.
 
