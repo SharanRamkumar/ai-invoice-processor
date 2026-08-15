@@ -1,0 +1,176 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9789a95c-fb7d-40b9-aaff-cd9f52d86f74",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "PAYMENT PENDING",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        336
+      ],
+      "id": "c47e6051-f9be-4cff-b468-49cf326fecd5",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.gmail }}",
+        "subject": "Payment reminder",
+        "message": "=Dear {{ $json.customer_name }},  This is a friendly reminder that payment for the following invoice is due:  \nInvoice number: {{ $json.invoice_number }}  Invoice Date: {{ $json.invoice_date }} \nDue Date: {{ $json.due_date }} \nAmount Due:  {{ $json.total_amount }}\nPlease arrange the payment by the due date to avoid any applicable late-payment charges or delays.  If the payment has already been made, please disregard this reminder. If you have any questions regarding the invoice or payment, please contact our accounts department.  Thank you for your prompt attention.  Best regards, {{ $json.vendor_name }} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1072,
+        240
+      ],
+      "id": "10d3a752-692d-4847-b46e-a1ca991518ce",
+      "name": "Send a message",
+      "webhookId": "7657057d-d348-435a-a860-9217765be47c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Your_google_api",
+          "name": "sharan's_gmail"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        864,
+        320
+      ],
+      "id": "c0042862-9de5-4862-b2a5-f1c565a010be",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "invoices",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "PAYMENT PENDING"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        800,
+        112
+      ],
+      "id": "236a7e7b-d306-4b88-a766-076906070cae",
+      "name": "Get a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "your_supabase_id",
+          "name": "sharan's_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        544,
+        112
+      ],
+      "id": "34b1c712-f963-4e7f-b8b9-29e4f45df9fe",
+      "name": "Schedule Trigger1"
+    }
+  ],
+  "connections": {
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5506d43d34521f8d3b20dd3ca322a9957acbe39593e4a0bb99deb00fa29c57f0"
+  }
+}
