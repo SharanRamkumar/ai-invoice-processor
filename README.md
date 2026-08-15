@@ -77,8 +77,6 @@ Supabase stores RAG documents, metadata, and vector embeddings.
 
 n8n orchestrates the invoice-processing and RAG workflows and connects the different services.
 
----
-
 ### ❗Reminding Email
 
 n8n also send emails as notifications to remind those customers whom are yet to pay.
@@ -87,9 +85,12 @@ More details on :
 example working/Reminder system.md
 ```
 
+---
+
 ## 3. 🏗️ System Architecture
 
 ```text
+
                          USER
                            │
                            ▼
