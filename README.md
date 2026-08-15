@@ -79,6 +79,14 @@ n8n orchestrates the invoice-processing and RAG workflows and connects the diffe
 
 ---
 
+### ❗Reminding Email
+
+n8n also send emails as notifications to remind those customers whom are yet to pay.
+More details on :
+```text
+
+```
+
 ## 3. 🏗️ System Architecture
 
 ```text
