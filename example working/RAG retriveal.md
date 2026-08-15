@@ -38,6 +38,6 @@ Following shows the retrieval of the ingested data give on Rag ingestion of data
 ---
 https://github.com/user-attachments/assets/683c671a-4494-4db4-8e44-0763ccbd592d
 
-If the above video dint work , use this URL  - https://streamable.com/fq7gbv
+If the above video didnt work , use this URL  - https://streamable.com/fq7gbv
 
 
