@@ -699,7 +699,7 @@ Approve       Flag for Review   Suspicious
 Detailed information about the RAG architecture and the choice of n8n instead of LangChain is available in:
 
 ```text
-n8n/RAG.md
+notes/RAG.md
 ```
 
 ---
