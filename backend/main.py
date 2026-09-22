@@ -41,7 +41,7 @@ UPLOAD_FOLDER = "uploads"
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-WEBHOOK_URL = os.getenv ("WEBHOOK_URL)
+WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 RAG_WEBHOOK_URL=os.getenv("RAG_WEBHOOK")
 
 @app.post("/upload")
