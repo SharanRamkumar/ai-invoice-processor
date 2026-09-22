@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import "./chatbot.css";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function Chatbot() {
     const [question, setQuestion] = useState("");
