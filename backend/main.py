@@ -41,8 +41,8 @@ UPLOAD_FOLDER = "uploads"
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-WEBHOOK_URL = "Your_webhook_URL"
-RAG_WEBHOOK_URL="Your_RAG_webhook_URL"
+WEBHOOK_URL = os.getenv ("WEBHOOK_URL)
+RAG_WEBHOOK_URL=os.getenv("RAG_WEBHOOK")
 
 @app.post("/upload")
 async def upload_invoice(file: UploadFile = File(...)):
