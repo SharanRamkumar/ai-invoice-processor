@@ -160,7 +160,7 @@ function App() {
           <ul className="space-y-3 text-gray-700">
             <li className="flex items-start gap-2">
               <span>✅</span>
-              <span>Upload a clear and readable invoice.</span>
+              <span>Upload a clear and readable invoice under 1MB.</span>
             </li>
 
             <li className="flex items-start gap-2">
@@ -181,9 +181,18 @@ function App() {
             <li className="flex items-start gap-2">
               <span>✅</span>
               <span>
-                The invoice should contain details such as vendor name,
-                invoice number, invoice date, due date, tax amount, total
-                amount, and payment status where applicable.
+                The invoice should contain only the following details: 
+
+                1. invoice number
+                2. invoice date
+                3. due date
+                4. vendor name
+                5. customer name
+                6. sub total
+                7. tax amount
+                8. total amount
+                9. status
+                10. Your gmail
               </span>
             </li>
 
