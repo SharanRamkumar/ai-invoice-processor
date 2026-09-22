@@ -7,7 +7,7 @@ export async function uploadInvoice(file) {
     formData.append("file", file);
 
     const response = await axios.post(
-        "YOUR_PATH/upload",
+        `${API_URL}/upload`,
         formData
     );
 
