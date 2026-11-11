@@ -15,7 +15,7 @@ The system processes uploaded invoices, extracts important invoice information, 
 
 ---
 
-## 1. 📌 Overview
+## 1.  Overview
 
 The **AI Invoice Processor** is designed to reduce the manual work involved in processing invoices.
 
@@ -30,7 +30,7 @@ The project contains two major workflows:
 
 ---
 
-## 2. ✨ Features
+## 2.  Features
 
 ### 📄 AI Invoice Processing
 
@@ -49,13 +49,13 @@ The project contains two major workflows:
   - Payment status
   - Email/contact information
 
-### ♻️ Duplicate Invoice Detection
+###  Duplicate Invoice Detection
 
 The invoice workflow checks whether an invoice has already been processed.
 
 If a duplicate is detected, the workflow returns a duplicate status instead of processing the same invoice again.
 
-### 🤖 RAG-based Chatbot
+###  RAG-based Chatbot
 
 The chatbot can answer questions related to:
 
@@ -65,19 +65,19 @@ The chatbot can answer questions related to:
 - Finance-related information
 - Stored knowledge-base documents
 
-### 🔎 Semantic Retrieval
+###  Semantic Retrieval
 
 Embeddings and vector similarity search are used to retrieve information that is semantically related to the user's question.
 
-### 🗄️ Supabase Vector Database
+###  Supabase Vector Database
 
 Supabase stores RAG documents, metadata, and vector embeddings.
 
-### ⚡ n8n Automation
+###  n8n Automation
 
 n8n orchestrates the invoice-processing and RAG workflows and connects the different services.
 
-### ❗Reminding Email
+### Reminding Email
 
 n8n also send emails as notifications to remind those customers whom are yet to pay.
 More details on :
@@ -87,7 +87,7 @@ example working/Reminder system.md
 
 ---
 
-## 3. 🏗️ System Architecture
+## 3.  System Architecture
 
 ```text
 
@@ -137,7 +137,7 @@ example working/Reminder system.md
 
 ---
 
-## 4. 🔄 How It Works
+## 4.  How It Works
 
 ### Invoice Processing Workflow
 
@@ -196,7 +196,7 @@ Return response to React
 
 ---
 
-## 5. 🧠 RAG Implementation
+## 5.  RAG Implementation
 
 ### What is RAG?
 
@@ -265,7 +265,7 @@ Vector retrieval allows semantically similar questions to retrieve relevant docu
 
 ---
 
-## 6. 🛠️ Technologies Used
+## 6.  Technologies Used
 
 ### Frontend
 
@@ -301,7 +301,7 @@ Vector retrieval allows semantically similar questions to retrieve relevant docu
 
 ---
 
-## 7. 📁 Project Structure
+## 7.  Project Structure
 
 ```text
 AI-Invoice-Processor/
@@ -348,7 +348,7 @@ AI-Invoice-Processor/
 
 ---
 
-## 8. ⚙️ Setup and Installation
+## 8.  Setup and Installation
 
 ### Prerequisites
 
@@ -443,7 +443,7 @@ Make sure the embedding dimension matches the embedding model used by the RAG wo
 
 ---
 
-## 9. 🗄️ Database and Similarity Function
+## 9.  Database and Similarity Function
 
 Supabase is used as the project's vector database.
 
@@ -563,9 +563,9 @@ even though the wording is different.
 
 ---
 
-## 10. 🚀 Future Enhancements
+## 10.  Future Enhancements
 
-### 📊 Dashboard
+###  Dashboard
 
 Introduce a dashboard for monitoring invoice-processing activity.
 
@@ -578,7 +578,7 @@ Potential features:
 - Invoice statistics
 - Processing history
 
-### 🔎 Invoice Search
+###  Invoice Search
 
 Add invoice search functionality based on:
 
@@ -589,7 +589,7 @@ Add invoice search functionality based on:
 - Payment status
 - Total amount
 
-### 👨‍💼 RAG Ingestion Through Admin Panel
+###  RAG Ingestion Through Admin Panel
 
 Introduce an admin panel that allows authorized users to upload or enter new RAG documents directly from the website.
 
@@ -611,7 +611,7 @@ Supabase Vector DB
 
 This would remove the need to manually use Postman for knowledge-base ingestion.
 
-### 🤖 Chatbot Improvements
+###  Chatbot Improvements
 
 A future version can allow the chatbot to retrieve and reason over **invoice-specific information** as well as general invoice and finance policies.
 
@@ -647,7 +647,7 @@ The AI could retrieve both invoice-specific information and the relevant policy 
 
 ---
 
-### 🛡️ AI-Powered Invoice Fraud Detection
+###  AI-Powered Invoice Fraud Detection
 
 A future version of the system can introduce an AI-powered fraud detection module to identify potentially suspicious or fraudulent invoices.
 
@@ -694,7 +694,7 @@ Approve       Flag for Review   Suspicious
 ```                                 
 
 
-## 📚 Documentation
+##  Documentation
 
 Detailed information about the RAG architecture and the choice of n8n instead of LangChain is available in:
 
@@ -704,7 +704,7 @@ notes/RAG.md
 
 ---
 
-## ⚠️ Disclaimer
+##  Disclaimer
 
 The finance, GST, and invoice-policy information used by the RAG system is intended for demonstration and application-development purposes.
 
@@ -712,7 +712,7 @@ For real financial, tax, or legal compliance decisions, information should be ve
 
 ---
 
-## 👨‍💻 Project
+##  Project
 
 **AI Invoice Processor**
 
